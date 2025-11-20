@@ -51,30 +51,22 @@ class CourseService {
   }
 
   // Search courses
-  async searchCourses(query) {
-    try {
-      const data = await apiClient.get(`/products/search?q=${query}`);
-      return {
-        courses: data.products.map((product) => ({
-          id: product.id,
-          title: product.title,
-          description: product.description,
-          image: product.thumbnail,
-          category: product.category,
-          rating: product.rating,
-          price: product.price,
-          status: this.getRandomStatus(),
-        })),
-      };
-    } catch (error) {
-      throw new Error("Failed to search courses");
-    }
-  }
-
-  // Helper to generate random status
-  getRandomStatus() {
-    const statuses = ["Active", "Upcoming", "Popular", "New"];
-    return statuses[Math.floor(Math.random() * statuses.length)];
+  async getCourses() {
+    const data = await apiClient.get(
+      "/search.json?subject=programming&limit=20"
+    );
+    return {
+      courses: data.docs.map((book) => ({
+        id: book.key,
+        title: book.title,
+        description: book.first_sentence?.[0] || "No description",
+        image: `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`,
+        category: book.subject?.[0] || "General",
+        rating: Math.random() * 5,
+        instructor: book.author_name?.[0] || "Unknown",
+        // ... more fields
+      })),
+    };
   }
 
   // Mock login (using dummyjson auth)

@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://dummyjson.com";
+const API_BASE_URL = "https://openlibrary.org";
 
 class ApiClient {
   async get(endpoint) {
